@@ -1,6 +1,7 @@
 "use strict";
 
 const API_URL = "https://script.google.com/macros/s/AKfycbysXv2itMmKabPAz4WFiakBjWIvqHvfEQVyb8_At0oAuUNyFZgeSg-BlMue4zyYu-2YwA/exec";
+const APP_VERSION = "1.1";
 const DB_NAME = "diario-bordo-offline";
 const DB_VERSION = 1;
 const $ = id => document.getElementById(id);
@@ -665,6 +666,7 @@ function startSignature() {
 
 async function initialize() {
   await openDatabase();
+  $("appVersion").textContent = "Versão " + APP_VERSION;
   startSignature();
   $("loginBtn").addEventListener("click", login);
   $("loginPass").addEventListener("keydown", event => { if (event.key === "Enter") login(); });
