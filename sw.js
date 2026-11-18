@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE = "diario-bordo-anglo-shell-v3";
+const CACHE = "diario-bordo-anglo-shell-v4";
 const BASE = new URL("./", self.registration.scope);
 const SHELL = [
   "",

@@ -572,10 +572,59 @@ async function logout() {
 }
 
 async function printRecords() {
-  if (!records.length) {
-    setNotice("Não há registros para imprimir.");
+  const vehicle = $("vehicleFilter").value;
+  const month = $("monthFilter").value;
+  if (!vehicle || !month) {
+    setNotice("Para imprimir, escolha o veículo e o mês nos filtros.");
     return;
   }
+
+  const selected = records
+    .filter(record => (record.veiculo + " · " + record.placa) === vehicle
+      && String(record.saida || "").slice(0, 7) === month)
+    .sort((a, b) => String(a.saida || "").localeCompare(String(b.saida || "")));
+  if (!selected.length) {
+    setNotice("Nenhum registro nesse veículo e mês.");
+    return;
+  }
+
+  const dateOnly = value => value ? value.split("T")[0].split("-").reverse().join("/") : "";
+  const rows = selected.map(record => {
+    const [departureDate, departureTime] = String(record.saida || "").split("T");
+    const [arrivalDate, arrivalTime] = String(record.chegada || "").split("T");
+    const meter = record.medidor || "KM";
+    const initialValue = record.valorIni == null ? "" : record.valorIni;
+    const finalValue = record.valorFim == null ? "" : record.valorFim;
+    const signature = /^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(record.assinatura || "")
+      ? '<img alt="Assinatura" src="' + escapeHtml(record.assinatura) + '">'
+      : "";
+
+    return "<tr><td>" + escapeHtml(record.motorista) + "</td><td>" + dateOnly(departureDate)
+      + "</td><td>" + escapeHtml(departureTime || "") + "</td><td>" + escapeHtml(meter + " " + initialValue)
+      + "</td><td>" + dateOnly(arrivalDate) + "</td><td>" + escapeHtml(arrivalTime || "")
+      + "</td><td>" + escapeHtml(meter + " " + finalValue) + "</td><td>" + escapeHtml(record.origem)
+      + "</td><td>" + escapeHtml(record.destino) + '</td><td class="signatureCell">' + signature + "</td></tr>";
+  }).join("");
+  const observations = selected
+    .filter(record => record.obs)
+    .map(record => dateOnly(record.saida) + ": " + escapeHtml(record.obs))
+    .join("<br>");
+
+  $("printReport").innerHTML = '<div class="printHeader"><span>DIÁRIO DE BORDO</span>'
+    + "<span>REMF-013 REV.: 00 · DATA DE REV.: 26/08/2022</span></div>"
+    + '<div class="printHeader printVehicle"><span>VEÍCULO: ' + escapeHtml(selected[0].veiculo)
+    + "</span><span>PLACA/TAG: " + escapeHtml(selected[0].placa) + "</span><span>MÊS: "
+    + month.split("-").reverse().join("/") + "</span></div>"
+    + "<table><thead><tr><th>MOTORISTA</th><th>DATA SAÍDA</th><th>HORA DE SAÍDA</th>"
+    + "<th>LEITURA INICIAL</th><th>DATA DE CHEGADA</th><th>HORA DE CHEGADA</th>"
+    + "<th>LEITURA FINAL</th><th>ORIGEM</th><th>DESTINO</th><th>ASSINATURA</th></tr></thead><tbody>"
+    + rows + "</tbody></table><div class=\"printObservations\"><b>OBS:</b> " + observations + "</div>";
+
+  const images = Array.from($("printReport").querySelectorAll("img"));
+  await Promise.all(images.map(image => image.complete ? Promise.resolve() : new Promise(resolve => {
+    image.addEventListener("load", resolve, { once: true });
+    image.addEventListener("error", resolve, { once: true });
+  })));
   window.print();
 }
 
