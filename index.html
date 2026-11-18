@@ -13,8 +13,12 @@
 </head>
 <body>
   <main>
+    <header class="brandHeader">
+      <h1>DIÁRIO DE BORDO</h1>
+      <span id="appVersion" class="appVersion"></span>
+    </header>
+
     <section id="loginView" class="panel login">
-      <h1>Diário de Bordo</h1>
       <p class="muted">Entre enquanto estiver conectado. Depois, os registros podem ser preenchidos offline neste aparelho.</p>
       <label for="loginUser">Usuário</label>
       <input id="loginUser" autocomplete="username">
@@ -27,7 +31,6 @@
     <section id="appView" class="hidden">
       <header class="appHeader">
         <div>
-          <h1>Diário de Bordo</h1>
           <div id="who" class="muted"></div>
         </div>
         <button id="installBtn" class="secondary hidden" type="button">Instalar app</button>
@@ -87,7 +90,6 @@
         <button id="saveBtn" class="primary" type="button">Salvar</button>
       </div>
     </section>
-    <footer id="appVersion" class="appVersion" aria-label="Versão do aplicativo"></footer>
   </main>
   <script src="./app.js" defer></script>
 </body>

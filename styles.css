@@ -39,13 +39,15 @@ img.signatureImage{height:46px;max-width:100%;background:#fff;border:1px solid v
 iframe.apiFrame{display:none!important;width:0;height:0;border:0}
 @media(max-width:440px){.toolbar{display:grid;grid-template-columns:1fr 1fr}.grid{gap:7px}body{padding-left:9px;padding-right:9px}}
 #printReport{display:none}
-.appVersion{text-align:center;color:var(--muted);font-size:11px;padding:8px 0}
+.brandHeader{display:flex;align-items:baseline;gap:8px;margin:3px 0 10px}
+.brandHeader h1{margin:0;font-size:20px}
+.appVersion{color:var(--muted);font-size:12px;font-weight:700;white-space:nowrap}
 @media print{
   @page{size:A4 landscape;margin:10mm}
   html,body{min-height:0;background:#fff!important;color:#000!important}
   body{padding:0;font:10px Arial,sans-serif}
   main{max-width:none;margin:0}
-  main>section:not(#printReport),#appVersion{display:none!important}
+  main>section:not(#printReport),.brandHeader{display:none!important}
   #printReport{display:block!important}
   .printHeader{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px;font-weight:700}
   .printVehicle{margin-bottom:8px}

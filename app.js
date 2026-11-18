@@ -666,7 +666,7 @@ function startSignature() {
 
 async function initialize() {
   await openDatabase();
-  $("appVersion").textContent = "Versão " + APP_VERSION;
+  $("appVersion").textContent = "VER. " + APP_VERSION;
   startSignature();
   $("loginBtn").addEventListener("click", login);
   $("loginPass").addEventListener("keydown", event => { if (event.key === "Enter") login(); });
